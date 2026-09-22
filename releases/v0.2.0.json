@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "platform": "macOS",
+  "architectures": [
+    "arm64",
+    "x64"
+  ],
+  "minimumOS": "13.5",
+  "url": "https://github.com/YIFF-by/magicfile-site/releases/download/v0.2.0/MagicFile-v0.2.0-macOS-universal.zip",
+  "size": 168237641,
+  "sha256": "868a325104eda5bd5b836b80e8b3406ce09ee9c04b173a344f6d6b508864539e",
+  "checksumUrl": "https://github.com/YIFF-by/magicfile-site/releases/download/v0.2.0/MagicFile-v0.2.0-macOS-universal.zip.sha256",
+  "localOnly": true,
+  "loginRequired": false
+}
