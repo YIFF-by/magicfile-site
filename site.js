@@ -42,3 +42,40 @@ document.addEventListener('visibilitychange',()=>{
   document.documentElement.classList.toggle('page-hidden',document.hidden);
   if(document.hidden)resets.forEach(reset=>reset());
 });
+
+// One shared highlight keeps the navigation a single surface.
+const navigation = document.querySelector('.masthead nav');
+if (navigation) {
+  const links = [...navigation.querySelectorAll('a')];
+  let hovered = null;
+  const updateHighlight = () => {
+    const focused = links.includes(document.activeElement) ? document.activeElement : null;
+    const active = links.find(link => link.hash === location.hash);
+    for (const link of links) {
+      if (link === active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    const target = hovered || focused || active;
+    if (!target) { delete navigation.dataset.highlight; return; }
+    navigation.style.setProperty('--nav-x', `${target.offsetLeft}px`);
+    navigation.style.setProperty('--nav-width', `${target.offsetWidth}px`);
+    navigation.dataset.highlight = 'true';
+  };
+  for (const link of links) {
+    link.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'touch' || !pointer.matches) return;
+      hovered = link; updateHighlight();
+    });
+  }
+  const clearHover = () => { hovered = null; updateHighlight(); };
+  navigation.addEventListener('pointerleave', clearHover);
+  navigation.addEventListener('pointercancel', clearHover);
+  navigation.addEventListener('focusin', updateHighlight);
+  navigation.addEventListener('focusout', () => requestAnimationFrame(updateHighlight));
+  addEventListener('hashchange', updateHighlight);
+  addEventListener('resize', clearHover, {passive:true});
+  pointer.addEventListener('change', clearHover);
+  document.addEventListener('visibilitychange', clearHover);
+  document.fonts.ready.then(updateHighlight);
+  updateHighlight();
+}
